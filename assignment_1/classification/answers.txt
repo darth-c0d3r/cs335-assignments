@@ -1,0 +1,100 @@
+Accuracies on full D1 Dataset :
+1vr : 73.8%
+1v1 : 81.3%
+
+Accuracies on full D2 Dataset :
+1vr : 98.5%
+1v1 : 81.3%
+
+
+Task 2.1 :
+I did not make any change to the printing routine and so, in every iteration 20
+observations are being made.
+From the graph obtained, we can make the following conclusions :
+	a.  The training set accuracy is higher than test set accuracy.
+		This is expected since we are training on that set and so, our model
+		will naturally fit the training set better.
+	b. 	After some examples are seen, the accuracies fluctuate at one fixed value.
+		The non variance is because, since all points of a class are clustered
+		around a single point, training the perceptron for one point will also
+		make the prediction correct for other points around that point. Also,
+		as more and more values are added to the weight vectors, the lower bound
+		on the magnitude of the vector increases which is likely to cause the 
+		steady increase in magnitude of the weight vector. Therefore, at later
+		stages, the effect of adding a small vector to the weight vector will
+		result in a much smaller change in the general direction represented
+		by the weight vector.
+	c. 	The smaller fluctuations are likely to be caused by some of the points
+		that lie away from the cluster. As the weights adjust to classify such
+		points correctly, they might end up misclassifying other set of points.
+		Thus there are small fluctuations seen in the graph.
+
+Task 2.2 :
+Observations from the graph :
+	a. 	The training set accuracy is higher than test set accuracy.
+		This is expected since we are training on that set and so, our model
+		will naturally fit the training set better. (Same as in Task 2.1)
+	b.	From the graph, we can see that as the size of training dataset increases,
+		the training accuracy decreases.
+		As the size of training set increases, the model has a more difficult task
+		at hand. With a small dataset and fixed number of data points, the model
+		can fit (or rather, overfit) the data quite easily. However, with the
+		increase in the size of training set it has a more difficult problem, thus
+		reducing the training set accuracy.
+	c.	From the graph, we can see that as the size of training dataset increases,
+		the test set accuracy increases.
+		As the size of training set increases, the model is less likely to overfit
+		to the training set and is more likely to generalize better to the unseen
+		test set data. We can also say that a larger training set will be more
+		representative of the test set. Using a larger dataset, the model is less
+		likely to fit to minor abberations of the training set and is more likely
+		to capture the overall general trends of the dataset.
+	d. 	If we interpolate the graph to infinite training set, we will see that the
+		training set accuracy and test set accuracy will converge to be equal.
+Question to the answer :
+	Since there are no training examples the weights will be exactly as we initialized
+	them, i.e., vectors of zeros. SO taking a dot product with any of the point will
+	give zero. Now, if we arbitrarily assign zero dot product to one of the sides of
+	hyperplane, effectively our model will be giving out random outputs. So, for a
+	balanced testset, (containing equal points of all classes), the accuracy will be
+	equal to 1/k, where k is the number of classes. In our case, we have 10 classes, so
+	the expected accuracy will be 1/10 = 0.1 = 10%. 
+
+
+Task 3.1 (Training on 800 data points and testing on 8000 data points) :
+1vr : 71.3%
+1v1 : 71.5%
+
+Number of Parameters in :
+1vr : d * n
+1v1 : d * n(n-1) / 2
+
+Accuracies on full D2 Dataset :
+1vr : 98.5%
+1v1 : 98.0%
+
+Observations :
+We see that if we train both the Perceptrons on full D1 dataset, 1v1 Perceptron gives
+much better test set accuracy. However, when we decrease the dataset, the test set
+accuracy of both the models is almost similar (1v1 being slightly higher). Also,
+the accuracy of 1v1 Perceptron decreases much more on decrease of dataset as
+compared to 1vr Perceptron. Also, we see that on D2 dataset, 1vr gives a better test
+set accuracy.
+
+Explanations :
+1v1 Perceptron has higher number of parameters and is a more "complex" model. This
+means that given a large enough dataset, it is more likely to fit it better as 
+compared to the relatively simpler 1vr Perceptron model. However, this also implies
+that if the dataset is small, the 1v1 Perceptron model is more likely to overfit,
+therefore resulting in a steep decrease in testing accuracy.
+On D2 dataset, 1vr gives better accuracy. We can conclude that a given model can 
+perform better on one dataset, whereas another model can work better on a different
+dataset.
+
+Task 4 :
+
+I tried to make several features, accuracies of each of which I have mentioned below.
+
+1. 	Sum of all pixels [1 dimensional]
+	Accuracy : 24.5%
+
