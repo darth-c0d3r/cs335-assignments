@@ -8,8 +8,7 @@ Accuracies on full D2 Dataset :
 
 
 Task 2.1 :
-I did not make any change to the printing routine and so, in every iteration 20
-observations are being made.
+In the graph, training and testing accuracies are plotted 20 times in each iteration.
 From the graph obtained, we can make the following conclusions :
 	a.  The training set accuracy is higher than test set accuracy.
 		This is expected since we are training on that set and so, our model
@@ -53,7 +52,7 @@ Observations from the graph :
 		training set accuracy and test set accuracy will converge to be equal.
 Question to the answer :
 	Since there are no training examples the weights will be exactly as we initialized
-	them, i.e., vectors of zeros. SO taking a dot product with any of the point will
+	them, i.e., vectors of zeros. So taking a dot product with any of the point will
 	give zero. Now, if we arbitrarily assign zero dot product to one of the sides of
 	hyperplane, effectively our model will be giving out random outputs. So, for a
 	balanced testset, (containing equal points of all classes), the accuracy will be
@@ -95,6 +94,6 @@ Task 4 :
 
 I tried to make several features, accuracies of each of which I have mentioned below.
 
-1. 	Sum of all pixels [1 dimensional]
-	Accuracy : 24.5%
+1. 	Number of 0s and 1s [2 dimensional]
+	Accuracy : 72.5%
 

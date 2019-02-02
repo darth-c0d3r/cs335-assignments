@@ -45,21 +45,7 @@ def enhancedFeatureExtractorDigit(datum):
     for this datum (a unit of data)
 
     ## DESCRIBE YOUR ENHANCED FEATURES HERE...
-    features[0] : gives the number of ones in the image, which corresponds
-                    to the area of the shape
-    features[1] : gives the number of zeros in the image, which corresponds
-                    to the area of the background
-    features[2] : first take the magnitude gradient in both x and y directions
-                    and then add the corresponding values and then add the 
-                    elements of whole array. This corresponds to edges.
-    features[3] : first take the magnitude gradient in both x and y directions
-                    and then multiply the corresponding values and then add the 
-                    elements of whole array. This corresponds to corners.
-    features[4] : this just counts the number of rows in which there are two
-                    occurrances of the shape. This will be positive only for
-                    stars and thus helps to distinguish stars.
-    Also, I found that in practice, perceptrons work best when magnitudes of
-    features are of similar orders, so I multiplied some constants to achieve it.
+
     ##
     """
 
@@ -76,24 +62,14 @@ def enhancedFeatureExtractorDigit(datum):
 
     # "*** YOUR CODE HERE ***"
 
-    def gradient():
-
-        grad_x = util.Counter()
-        grad_y = util.Counter()
-
-        idx = 0
-        for x in range(49):
-            for y in range(50):
-                grad_x[idx] = (getPixelVal(x+1,y) - getPixelVal(x,y))**2
-                idx += 1
-
-        idx = 0
-        for y in range(49):
-            for x in range(50):
-                grad_y[idx] = (getPixelVal(x,y+1) - getPixelVal(x,y))**2
-                idx += 1
-
-        return grad_x, grad_y
+    def corner(x, y):
+        total = 0
+        for i in range(-1,2):
+            for j in range(-1,2):
+                total += getPixelVal(x+i, y+j)
+        if total == 4:
+            return 1
+        return 0
 
     def discontinuity(x):
         got = 0
@@ -111,26 +87,16 @@ def enhancedFeatureExtractorDigit(datum):
             return 1
         return 0
 
-    def gradient_add(gx, gy):
-        ans = 0
-        for i in range(len(gx)):
-            ans += gx[i] + gy[i]
-        # ans = ans / len(gx)
-        return ans
+    def gradient():
+        grad = 0
+        for x in range(49):
+            for y in range(50):
+                grad += (getPixelVal(x,y) - getPixelVal(x+1,y))**2
+        for x in range(50):
+            for y in range(49):
+                grad += (getPixelVal(x,y) - getPixelVal(x,y+1))**2
 
-    def gradient_sub(gx, gy):
-        ans = 0
-        for i in range(len(gx)):
-            ans += abs(gx[i] - gy[i])
-        # ans = ans / len(gx)
-        return ans
-
-    def gradient_mul(gx, gy):
-        ans = 0
-        for i in range(len(gx)):
-            ans += gx[i] * gy[i]
-        # ans = ans / len(gx)
-        return ans
+        return grad
 
     for i in range(len(datum)):
         features[0] += datum[i]
@@ -138,15 +104,28 @@ def enhancedFeatureExtractorDigit(datum):
     for i in range(len(datum)):
         features[1] += 1 - datum[i]
 
-    grad_x, grad_y = gradient()
-    features[2] = gradient_add(grad_x, grad_y)
-    features[2] *= 10
-    features[3] = gradient_mul(grad_x, grad_y)
-    features[3] *= 100
+    for x in range(1,49):
+        for y in range(1,49):
+            features[2] += corner(x,y)
+    features[2] *= 2
 
     for x in range(50):
-        features[4] += discontinuity(x)
-    features[4] *= 1000    
+        features[3] += discontinuity(x)
+    # features[3] *= 1450
+    features[3] *= 1450
+
+    # features[4] = 9.5*gradient()
+
+    # features[4] = 100
+
+    # for x in range(50-1):
+    #     for y in range(50):
+    #         features[4] += (getPixelVal(x,y) == 0 and getPixelVal(x+1,y) == 1 and getPixelVal(x+2,y) == 0)
+    #         # features[4] += abs(getPixelVal(x,y) - getPixelVal(x+1,y))
+    # for x in range(50):
+    #     for y in range(50-1):
+    #         features[4] += (getPixelVal(x,y) == 0 and getPixelVal(x,y+1) == 1 and getPixelVal(x,y+2) == 0)
+    #         # features[4] += abs(getPixelVal(x,y) - getPixelVal(x,y+1))
 
     # print(features)
 
