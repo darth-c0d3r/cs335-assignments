@@ -49,7 +49,24 @@ class FullyConnectedLayer:
 
 		###############################################
 		# TASK 2 - YOUR CODE HERE
-		raise NotImplementedError
+		# assuming delta is nxk and activation_prev is nxj
+		wgrad_matrix = np.zeros(self.weights.shape)
+		bgrad_matrix = np.zeros(self.biases.shape)
+		new_delta = np.zeros((n,self.in_nodes))
+		for r in range(n):
+			hadamard = delta[r,:] * derivative_sigmoid(self.data[r,:])
+			hadamard = np.reshape(hadamard, (hadamard.shape[0], -1))
+		
+			wgrad_matrix += np.transpose(np.matmul(hadamard, np.reshape(activation_prev[r,:], (self.in_nodes,-1)).T))
+			bgrad_matrix += hadamard.T
+
+			new_delta[r,:] = np.matmul(self.weights, hadamard).T
+
+		self.weights -= lr * wgrad_matrix
+		self.biases  -= lr * bgrad_matrix
+
+		return new_delta
+		# raise NotImplementedError
 		###############################################
 
 class ConvolutionLayer:
@@ -92,10 +109,12 @@ class ConvolutionLayer:
 		for i in range(self.out_row):
 			for j in range(self.out_col):
 				data = X[:,:, i*self.stride : i*self.stride+self.filter_row, j*self.stride : j*self.stride+self.filter_col]
+
 				data = data.reshape(n,-1)
 				kern = np.transpose(self.weights.reshape(self.out_depth,-1))
-				bias = np.repeat(self.biases, n, axis=0)
-				self.data[:,:,i,j] = np.matmul(data,kern)+bias
+				bias = np.repeat(self.biases.reshape(1,self.biases.shape[0]), n, axis=0)
+				
+				self.data[:,:,i,j] = (np.matmul(data,kern)+bias).reshape((n, self.out_depth))
 		return sigmoid(self.data)
 		# raise NotImplementedError
 		###############################################
@@ -113,7 +132,30 @@ class ConvolutionLayer:
 
 		###############################################
 		# TASK 2 - YOUR CODE HERE
-		raise NotImplementedError
+		wgrad_matrix = np.zeros(self.weights.shape)
+		bgrad_matrix = np.zeros(self.biases.shape)
+		new_delta = np.zeros((n,self.in_depth, self.in_row, self.in_col))
+
+		for r in range(n):
+			hadamard = delta[r,:,:,:] * derivative_sigmoid(self.data[r,:,:,:])
+			for d in range(self.out_depth):
+				for i in range(self.out_row):
+					for j in range(self.out_col):
+						i1 = i*self.stride
+						i2 = i1+self.filter_row
+						j1 = j*self.stride
+						j2 = j1+self.filter_col
+						
+						wgrad_matrix[d,:,:,:] += hadamard[d,i,j] * activation_prev[r,:,i1:i2,j1:j2]
+						bgrad_matrix[d] += hadamard[d,i,j]
+						new_delta[r,:,i1:i2,j1:j2] += hadamard[d,i,j] * self.weights[d,:,:,:]
+
+		self.weights -= lr * wgrad_matrix
+		self.biases  -= lr * bgrad_matrix
+
+		return new_delta
+
+		# raise NotImplementedError
 		###############################################
 	
 class AvgPoolingLayer:
@@ -167,10 +209,17 @@ class AvgPoolingLayer:
 		# new_delta : del_Error/ del_activation_prev
 		
 		n = activation_prev.shape[0] # batch size
+		
 
 		###############################################
 		# TASK 2 - YOUR CODE HERE
-		raise NotImplementedError
+		k = self.stride
+		# in = n * d * a * b [delta]
+		# out = n * d * ka * kb
+		out = np.zeros(activation_prev.shape)
+		out[:,:,:delta.shape[2]*k, :delta.shape[3]*k] = np.repeat(np.repeat(delta,k,axis=2),k,axis=3)/(k*k)
+		return out
+		# raise NotImplementedError
 		###############################################
 
 

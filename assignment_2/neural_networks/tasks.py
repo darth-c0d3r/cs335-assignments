@@ -22,7 +22,10 @@ def taskSquare(draw):
 	# Eg. nn1.addLayer(FullyConnectedLayer(x,y))
 	###############################################
 	# TASK 2.1 - YOUR CODE HERE
-	raise NotImplementedError
+	nn1 = nn.NeuralNetwork(2, 0.2, 50, 20)
+	nn1.addLayer(FullyConnectedLayer(2, 4))
+	nn1.addLayer(FullyConnectedLayer(4, 2))
+	# raise NotImplementedError
 	###############################################
 	nn1.train(XTrain, YTrain, XVal, YVal, False, True)
 	pred, acc = nn1.validate(XTest, YTest)
@@ -42,7 +45,10 @@ def taskSemiCircle(draw):
 	# Eg. nn1.addLayer(FullyConnectedLayer(x,y))
 	###############################################
 	# TASK 2.2 - YOUR CODE HERE
-	raise NotImplementedError
+	nn1 = nn.NeuralNetwork(2, 0.2, 50, 20)
+	nn1.addLayer(FullyConnectedLayer(2, 2))
+	nn1.addLayer(FullyConnectedLayer(2, 2))
+	# raise NotImplementedError
 	###############################################
 	nn1.train(XTrain, YTrain, XVal, YVal, False, True)
 	pred, acc  = nn1.validate(XTest, YTest)
@@ -61,7 +67,9 @@ def taskMnist():
 	# Eg. nn1.addLayer(FullyConnectedLayer(x,y))
 	###############################################
 	# TASK 2.3 - YOUR CODE HERE
-	raise NotImplementedError	
+	nn1 = nn.NeuralNetwork(10, 0.05, 20, 20)
+	nn1.addLayer(FullyConnectedLayer(784, 10))
+	# raise NotImplementedError	
 	###############################################
 	nn1.train(XTrain, YTrain, XVal, YVal, False, True)
 	pred, acc  = nn1.validate(XTest, YTest)
@@ -85,9 +93,15 @@ def taskCifar10():
 	# # Eg. nn1.addLayer(FullyConnectedLayer(x,y))
 	# ###############################################
 	# # TASK 2.4 - YOUR CODE HERE
-	raise NotImplementedError	
+	nn1 = nn.NeuralNetwork(10, 0.1, 20, 20)
+	nn1.addLayer(ConvolutionLayer((3,32,32), (10,10), 4, 2))
+	nn1.addLayer(AvgPoolingLayer((4,12,12), (2,2), 2))
+	nn1.addLayer(FlattenLayer())
+	nn1.addLayer(FullyConnectedLayer(144, 50))
+	nn1.addLayer(FullyConnectedLayer(50, 10))
+	# raise NotImplementedError	
 	###################################################
-	# return nn1,  XTest, YTest, modelName # UNCOMMENT THIS LINE WHILE SUBMISSION
+	return nn1,  XTest, YTest, modelName # UNCOMMENT THIS LINE WHILE SUBMISSION
 
 
 	nn1.train(XTrain, YTrain, XVal, YVal, True, True, loadModel=False, saveModel=True, modelName=modelName)
