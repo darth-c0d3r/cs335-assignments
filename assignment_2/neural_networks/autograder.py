@@ -69,7 +69,7 @@ def grade2():
 
     print('Marks: {}/9'.format(marks))
     return marks
-
+    
 
 def test_net(net, xtest, ytest):
     _, acc  = net.validate(xtest, ytest)

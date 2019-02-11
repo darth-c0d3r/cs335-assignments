@@ -12,15 +12,17 @@ General Observations:
 	I also observed that sometimes, increasing the number of layers in
 	Tasks 2.1 and 2.2 can result in a decrease in accuracy.
 
-FOR ALL TASKS I HAVE CHECKED ON SEED VALUES OF 1,10,100,1000.
+FOR TASKS 2.1, 2,2 and 2,3 I HAVE CHECKED ON SEED VALUES OF 1,10,100,1000.
 
 TASK 2.1
 
 For Squares dataset, I observed that the minimal network required
 to pass the required accuracy of 90% is:
+
 nn1 = nn.NeuralNetwork(2, 0.2, 50, 20)
 nn1.addLayer(FullyConnectedLayer(2, 4))
 nn1.addLayer(FullyConnectedLayer(4, 2))
+
 Even though I have trained for 20 epochs, the 90% mark is crossed after
 7 epochs only.
 Also, keeping the hidden layer of 3 neurons also crosses 90% in most
@@ -29,24 +31,39 @@ So, to be safe for all seed values, I have used 4 neurons in the hidden layer.
 We can not use 1 neuron in the hidden layer as the input to that layer is not
 linearly separable.
 
+NOT(A XOR B) = ( NOT(A) OR B) AND ( A OR NOT(B))
+If A and B were both binary signals then only 2 neurons in the hidden
+layer would have sufficed. However since they are real numbers, the network
+requires 2 extra neurons. This is minimum, since we must at least require
+2 neurons (in binary signals case). I tried using 3 neurons and it did not
+good enough accuracy. Next number is 4 and it works well for 4 hidden neurons.
+
 TASK 2.2
 
 For Semi-Circle dataset, I observed that the minimal network required
 to pass the required accuracy of 90% is:
+
 nn1 = nn.NeuralNetwork(2, 0.2, 50, 20)
 nn1.addLayer(FullyConnectedLayer(2, 2))
 nn1.addLayer(FullyConnectedLayer(2, 2))
+
 Even though I have trained for 20 epochs, the 90% mark is crossed after
 the first epoch only.
 Task 2.2 needs lesser neurons as the dataset can be separated using
 linear lines more easily as compared to the XOR dataset.
+Also, only 2 neurons are required in the hidden layer because the function
+can be approximated using results of two affine lines. The output layer
+can now combine the results from the 2 neurons in the hidden layer and give
+the correct output.
 
 TASK 2.3
 
 For MNIST dataset, I observed that the minimal network required
 to pass the required accuracy of 90% is:
+
 nn1 = nn.NeuralNetwork(10, 0.05, 20, 20)
 nn1.addLayer(FullyConnectedLayer(784, 10))
+
 The accuracy remains very close to 90%. I checked on various seed values,
 and was getting test accuracy of around 91%.
 HOWEVER, there might be a seed value in which the accuracy is slightly
@@ -57,20 +74,24 @@ TASK 2.4
 
 For CIFAR Dataset, this is one of the networks that performs well, i.e.
 gives an accuracy greater than 35%.
+
 nn1 = nn.NeuralNetwork(10, 0.1, 20, 20)
 nn1.addLayer(ConvolutionLayer((3,32,32), (10,10), 4, 2))
 nn1.addLayer(AvgPoolingLayer((4,12,12), (2,2), 2))
 nn1.addLayer(FlattenLayer())
 nn1.addLayer(FullyConnectedLayer(144, 50))
 nn1.addLayer(FullyConnectedLayer(50, 10))
+
 It gives accuracy of 39.5% with a seed value of 1.
 
 Also, the following network gives accuracy of 39% with a seed value of 10.
+
 nn1 = nn.NeuralNetwork(10, 0.1, 20, 20)
 nn1.addLayer(ConvolutionLayer((3,32,32), (10,10), 4, 2))
 nn1.addLayer(AvgPoolingLayer((4,12,12), (2,2), 2))
 nn1.addLayer(FlattenLayer())
 nn1.addLayer(FullyConnectedLayer(144, 10))
+
 But val accuracy is around 36% so it might be sensitive to seed value and can
 go to accuracy lower than 35%.
 	
