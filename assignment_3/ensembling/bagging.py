@@ -31,8 +31,17 @@ class BaggingClassifier:
         """
 
         self.features = trainingData[0].keys()
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # "*** YOUR CODE HERE ***"
+
+        for i in range(self.num_classifiers):
+            sampleData = util.Counter()
+            sampleLabels = util.Counter()
+            for j in range(int(self.ratio * len(trainingData))):
+                idx = random.randint(0, len(trainingData)-1)
+                sampleData[j], sampleLabels[j] = trainingData[idx], trainingLabels[idx]
+            self.classifiers[i].train(sampleData, sampleLabels)
+
+        # util.raiseNotDefined()
 
 
     def classify( self, data):
@@ -46,5 +55,18 @@ class BaggingClassifier:
         The function should return a list of labels where each label should be one of legaLabels.
         """
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # "*** YOUR CODE HERE ***"
+
+        guesses = []
+        
+        for datum in data:
+            guess = 0
+            for i in range(self.num_classifiers):
+                guess += self.classifiers[i].classify([datum])[0]
+            guess = np.sign(guess)
+            if guess == 0:
+                guess = np.random.choice(self.classifiers[0].legalLabels)
+            guesses.append(guess)
+        return guesses
+
+        # util.raiseNotDefined()

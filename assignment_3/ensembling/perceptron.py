@@ -76,8 +76,27 @@ class PerceptronClassifier:
                 # util.raiseNotDefined()
 
     def sample_data(self, trainingData, trainingLabels, sample_weights):
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # "*** YOUR CODE HERE ***"
+        sampleSize = int(len(trainingData)/2)
+
+        sampleData = util.Counter()
+        sampleLabels = util.Counter()
+
+        cumulative_weights = sample_weights[:]
+        for i in range(1,len(cumulative_weights)):
+            cumulative_weights[i] += cumulative_weights[i-1]
+
+        for i in range(sampleSize):
+            idx = random.uniform(0.0, 1.0)
+            for j in range(len(trainingData)):
+                if idx < cumulative_weights[j]:
+                    sampleData[i] = trainingData[j]
+                    sampleLabels[i] = trainingLabels[j]
+                    break
+
+        return sampleData, sampleLabels
+
+        # util.raiseNotDefined()
 
     def classify(self, data ):
         """
