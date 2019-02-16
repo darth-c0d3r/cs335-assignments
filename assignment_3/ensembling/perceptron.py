@@ -77,22 +77,26 @@ class PerceptronClassifier:
 
     def sample_data(self, trainingData, trainingLabels, sample_weights):
         # "*** YOUR CODE HERE ***"
-        sampleSize = int(len(trainingData)/2)
+        sampleSize = int(len(trainingData) * 0.5)
 
         sampleData = util.Counter()
         sampleLabels = util.Counter()
 
-        cumulative_weights = sample_weights[:]
-        for i in range(1,len(cumulative_weights)):
-            cumulative_weights[i] += cumulative_weights[i-1]
+        # cumulative_weights = sample_weights[:]
+        # for i in range(1,len(cumulative_weights)):
+        #     cumulative_weights[i] += cumulative_weights[i-1]
 
-        for i in range(sampleSize):
-            idx = random.uniform(0.0, 1.0)
-            for j in range(len(trainingData)):
-                if idx < cumulative_weights[j]:
-                    sampleData[i] = trainingData[j]
-                    sampleLabels[i] = trainingLabels[j]
-                    break
+        # for i in range(sampleSize):
+        #     idx = random.uniform(0.0, 1.0)
+        #     for j in range(len(trainingData)):
+        #         if idx < cumulative_weights[j]:
+        #             sampleData[i] = trainingData[j]
+        #             sampleLabels[i] = trainingLabels[j]
+        #             break
+
+        samplePairs = util.nSample(sample_weights, zip(trainingData, trainingLabels), sampleSize)
+        for i in range(len(samplePairs)):
+        	sampleData[i], sampleLabels[i] = samplePairs[i]
 
         return sampleData, sampleLabels
 

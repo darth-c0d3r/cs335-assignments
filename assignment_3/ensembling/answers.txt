@@ -1,0 +1,92 @@
+TASK 4
+
+Observations and Explanations :
+
+Doing classification
+--------------------
+classifier:		bagging [sampled using random.randint]
+num of weak classifier:20
+training set size:	1000
+Extracting features...
+Training...
+919 correct out of 1000 (91.9%).
+Validating...
+788 correct out of 1000 (78.8%).
+Testing...
+802 correct out of 1000 (80.2%).
+
+Doing classification
+--------------------
+classifier:		bagging [sampled using util.nSample]
+num of weak classifier:20
+training set size:	1000
+Extracting features...
+Training...
+892 correct out of 1000 (89.2%).
+Validating...
+779 correct out of 1000 (77.9%).
+Testing...
+770 correct out of 1000 (77.0%).
+
+
+Doing classification
+--------------------
+classifier:		boosting [using 0.5x data]
+num of boosting iterations:20
+training set size:	1000
+Extracting features...
+Training...
+905 correct out of 1000 (90.5%).
+Validating...
+772 correct out of 1000 (77.2%).
+Testing...
+752 correct out of 1000 (75.2%).
+
+Answer 1 :
+
+We observe that the training accuracy for bagging ensemble saturates
+after a certain limit on the number of weak classifiers. However, for
+boosting ensembles we can see that that the training accuracy still
+seems to be increasing. This is consistent with the property of 
+boosting ensemble which states that given enough classifiers, the
+ensemble of base learners will reach a training accuracy of 100% provided
+the base learners have an accuracy of more than 50%, i.e. they perform
+better than random classification.
+
+Answer 2 :
+
+The statement, "An ensemble combining perceptrons with weighted majority 
+cannot be represented as an equivalent single perceptron" is true. To
+support my claim, I have attached also added a rough sketch which is a
+working example in my arguement. Please refer to that ("example.jpg") as well.
+In the sketch, I have a dataset, such that the closed shape labeled "-"
+contains all the negative points and the cloased shape labeled "+"
+contains all the positive points. Also, I have three ensembles a, b and c.
+This splits the space into 6 parts, 1-6.
+
+In part 1, all the points are -ve. The predictions of perceptrons a, b and c
+are each negative. So the overall prediction will be also negative.
+
+In part 2, all the points are -ve. The predictions of perceptrons b and c
+are each negative and that of a is positive. So the overall prediction will 
+be negative.
+
+In part 3, all the points are +ve. The predictions of perceptrons a and b
+are each positive and that of c is negative. So the overall prediction will 
+be positive.
+
+In part 4, all the points are -ve. The predictions of perceptrons a and b
+are each negative and that of c is positive. So the overall prediction will 
+be negative.
+
+In part 5, all the points are +ve. The predictions of perceptrons a and c
+are each positive and that of b is negative. So the overall prediction will 
+be positive.
+
+In part 6, all the points are +ve. The predictions of perceptrons a, b and c
+are each positive. So the overall prediction will be also positive.
+
+Therefore in this case, if weights of all base learners are equal we can get
+training set accuracy of 100% using 3 base learners. However, since the dataset
+is not linearly separable this can not be done by any single perceptron.
+Therefore, the two are not equivalent.
