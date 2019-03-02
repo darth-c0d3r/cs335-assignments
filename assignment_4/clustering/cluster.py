@@ -30,6 +30,25 @@ def div_points(p, k):
 		ans[i] = p[i]/k
 	return ans
 
+def get_median(points):
+
+	median = [0] * len(points[0])
+	n = len(points)
+
+	for i in range(len(median)):
+		values = [0] * len(points)
+		for j in range(len(points)):
+			values[j] = points[j][i]
+
+		values.sort()
+
+		if n % 2 == 0:
+			median[i] = (values[(n-1)//2]+values[(n)//2])/2.0
+		else:
+			median[i] = values[(n-1)//2]
+
+	return tuple(median)
+
 
 def distance_euclidean(p1, p2):
 	'''
@@ -49,6 +68,7 @@ def distance_euclidean(p1, p2):
 	distance = 0
 	for i in range(len(p1)):
 		distance += (p1[i] - p2[i])**2
+	distance = math.sqrt(distance)
 
 	########################################
 	return distance
@@ -102,7 +122,7 @@ def kmeans_iteration_one(data, centroids, distance):
 
 	running_sum = [float(0)] * len(centroids)
 	for i in range(len(running_sum)):
-		running_sum[i] = [float(0)] * len(data[0])
+		running_sum[i] = [float(0)] * len(centroids[0])
 
 	running_cnt = [0] * len(centroids)
 
@@ -114,11 +134,10 @@ def kmeans_iteration_one(data, centroids, distance):
 
 	for i in range(len(centroids)):
 
-		if running_sum[i] != 0:
+		if running_cnt[i] != 0:
 			new_centroids[i] = tuple(div_points(running_sum[i], float(running_cnt[i])))
 		else:
 			new_centroids[i] = deepcopy(centroids[i])
-
 
 	########################################
 	assert len(new_centroids) == len(centroids)
@@ -139,7 +158,8 @@ def hasconverged(old_centroids, new_centroids, epsilon=1e-1):
 	# Use Euclidean distance to measure centroid displacements.
 
 	for i in range(len(old_centroids)):
-		if distance_euclidean(old_centroids[i], new_centroids[i]) > epsilon:
+		dist = distance_euclidean(old_centroids[i], new_centroids[i])
+		if dist > epsilon:
 			converged = False
 			break
 
@@ -169,10 +189,10 @@ def iteration_many(data, centroids, distance, maxiter, algorithm, epsilon=1e-1):
 	# Tip: use deepcopy() if you run into weirdness.
 
 	for _ in range(maxiter):
-		new_centroids = kmeans_iteration_one(data, all_centroids[-1], distance)
+		new_centroids = iteration_one(data, all_centroids[-1], distance, algorithm)
 		all_centroids.append(new_centroids)
 
-		if hasconverged(all_centroids[-2], all_centroids[-1]):
+		if hasconverged(all_centroids[-2], all_centroids[-1], epsilon):
 			break
 
 
@@ -197,7 +217,7 @@ def performance_SSE(data, centroids, distance):
 	for i in range(len(data)):
 		min_dist = float("inf")
 		for k in range(len(centroids)):
-			dist = distance(data[i], centroids[k])
+			dist = distance_euclidean(data[i], centroids[k]) ** 2
 			if  dist < min_dist:
 				min_dist = dist
 		sse += min_dist
@@ -228,6 +248,55 @@ def initialization_kmeansplusplus(data, distance, k):
 
 	# NOTE: Provide extensive comments with your code.
 
+	# choose first point randomly
+	centroids.append(random.sample(data, 1)[0])
+
+	# loop over to sample k-1 more points
+	for _ in range(k-1):
+
+		# initialize distances from closest centroid to zero
+		dists = [0] * len(data)
+		# initialize sum of these distances to zero (reqd. for normalization)
+		dist_sum = float(0)
+
+		# loop over all points to find distance from closest centroid
+		for i in range(len(data)):
+			min_dist = float("inf")
+			# loop over all centroids to find closest centroid
+			for j in range(len(centroids)):
+				dist = distance(data[i], centroids[j])
+				if dist < min_dist:
+					min_dist = dist
+
+			# assign the distance from closest centroid to corresponding point
+			dists[i] = min_dist
+			dist_sum += min_dist
+
+		# get a CDF over the distances
+		# done by normalizing all the points
+		# followed by adding adjacent items
+		dists[0] /= dist_sum
+		for i in range(1,len(data)):
+			dists[i] = dists[i-1] + (dists[i]/dist_sum)
+
+		# uniform random variable between 0 and 1
+		probe = random.uniform(0,1)
+
+		# choose the point corresponding to the probe
+		for i in range(len(data)):
+			if probe < dists[i]:
+				centroids.append(data[i])
+				break
+
+		# explanation of sampling algorithm:
+		# by obtaining CDF, we have a monotonic array with max value 1.
+		# the difference between adjacent items will correspond to the 
+		# probability of sampling it.
+		# so if we have a uniform random probe and we choose the point 
+		# for which the cdf value is just greater than the probe,
+		# it will be equivalent to sampling data from the required
+		# probability distribution.
+
 	########################################
 	assert len(centroids) == k
 	return centroids
@@ -255,6 +324,12 @@ def distance_manhattan(p1, p2):
 	# TODO [task4]:
 	# Your function must work for all sized tuples.
 
+	assert len(p1) == len(p2)
+
+	distance = 0
+	for i in range(len(p1)):
+		distance += abs(p1[i] - p2[i])
+
 	########################################
 	return distance
 
@@ -267,12 +342,36 @@ def kmedians_iteration_one(data, centroids, distance):
 
 	Returns a list of tuples, representing the new cluster centroids after one iteration of k-medians clustering algorithm.
 	'''
-
 	new_centroids = []
 
 	# TODO [task4]:
 	# You must find the new cluster centroids.
 	# Perform just 1 iteration (assignment+updation) of k-medians algorithm.
+
+	clusters = [-1] * len(data)
+
+	for i in range(len(data)):
+		min_dist = float("inf")
+		for k in range(len(centroids)):
+			dist = distance(data[i], centroids[k])
+			if  dist < min_dist:
+				min_dist = dist
+				clusters[i] = k
+
+	cluster_points = [0]*len(centroids)
+	for i in range(len(centroids)):
+		cluster_points[i] = []
+
+	for i in range(len(data)):
+		cluster_points[clusters[i]].append(data[i])
+
+	new_centroids = [0] * len(centroids)
+
+	for i in range(len(centroids)):
+		if len(cluster_points[i]) == 0:
+			new_centroids[i] = deepcopy(centroids[i])
+		else:
+			new_centroids[i] = get_median(cluster_points[i])
 
 	########################################
 	assert len(new_centroids) == len(centroids)
@@ -287,11 +386,19 @@ def performance_L1(data, centroids, distance):
 	Returns: The L1-norm error of the clustering represented by centroids, on the data.
 	'''
 
-	l1_error = None
+	l1_error = float(0)
 
 	# TODO [task4]:
 	# Calculate the L1-norm error of the clustering represented by centroids, on the data.
 	# Make sure to use the distance metric provided.
+
+	for i in range(len(data)):
+		min_dist = float("inf")
+		for k in range(len(centroids)):
+			dist = distance_manhattan(data[i], centroids[k])
+			if  dist < min_dist:
+				min_dist = dist
+		l1_error += min_dist
 
 	########################################
 	return l1_error
@@ -410,7 +517,7 @@ def visualize_data(data, all_centroids, args):
 		clusters[argmin(dlist)].append(point)
 
 	# plot each point of each cluster
-	colors = cycle('rgbwkcmy')
+	colors = cycle('rgbkcmy')
 
 	for c, points in zip(colors, clusters):
 		x = [p[0] for p in points]

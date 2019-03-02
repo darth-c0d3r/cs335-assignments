@@ -25,6 +25,41 @@ def read_image(filename):
 	# Afterwards, all data in the file corresponds to the actual image.
 	# You can read the data byte by byte and update corresponding element of 'img' variable.
 	# For more information on PPM and PGM file formats, refer to the link mentioned in the assignment document.
+	file = open(filename)
+	
+	filetype = file.readline()
+	dimensions = file.readline()
+
+	height = ""
+	width = ""
+	space = False
+
+	for i in range(len(dimensions)):
+		if space is False:
+			if dimensions[i] != ' ':
+				width += dimensions[i]
+			else:
+				space = True
+		else:
+			height += dimensions[i]
+
+	height, width = int(height), int(width)
+	file.readline()
+
+	if filetype.strip() == 'P6':
+		img = [[[0 for _ in range(3)] for _ in range(width)] for _ in range(height)]
+		for i in range(height):
+			for j in range(width):
+				for k in range(3):
+					pix = file.read(1)
+					img[i][j][k] = ord(pix)
+
+	else:
+		img = [[0 for _ in range(width)] for _ in range(height)]
+		for i in range(height):
+			for j in range(width):
+					pix = file.read(1)
+					img[i][j] = ord(pix)
 
 	return img
 
@@ -35,9 +70,13 @@ def preprocess_image(img):
 
 	Returns data - a list of datapoints where each datapoint is a tuple
 	'''
-	data = [(None,None,None)]
+	data = []
 	# todo: task5
 	# You need to convert the image such that data is a list of datapoints on which you want to do clustering and each datapoint in the list is a 3-tuple with RGB values.
+
+	for i in range(len(img)):
+		for j in range(len(img[i])):
+			data.append(tuple(img[i][j]))
 
 	return data
 
@@ -55,9 +94,17 @@ def label_image(img, cluster_centroids):
 	[Empty 2D list] -- labels = [[0 for _ in range(width)] for _ in range(height)]
 	'''
 
-	cluster_labels = None
+	cluster_labels = [[0 for i in range(len(img[j]))] for j in range(len(img))]
 	# todo: task6
 	# Iterate over the image pixels and replace each pixel value with cluster number corresponding to its nearest cluster centroid
+	for i in range(len(img)):
+		for j in range(len(img[i])):
+			min_dist = float("inf")
+			for k in range(len(cluster_centroids)):
+				dist = distance(img[i][j], cluster_centroids[k])
+				if dist < min_dist:
+					min_dist = dist
+					cluster_labels[i][j] = k
 
 	return cluster_labels
 
@@ -75,7 +122,28 @@ def write_image(filename, img):
 	# Next line should contain the maximum value of any pixel in the image (use max function to find it). Note that this should be an integer and within (0-255)
 	# Next line onwards should contain the actual image content as per the binary PPM or PGM file format.
 
-	pass
+	file = open(filename, "w+")
+
+	# 3D case
+	if type(img[0][0]) == type([]):
+		file.write("P6\n")
+		file.write("%d %d\n" % (len(img[0]), len(img)))
+		file.write("%d\n" % (max(max(max(img)))))
+
+		for i in range(len(img)):
+			for j in range(len(img[i])):
+				for k in range(3):
+					file.write(chr(int(img[i][j][k])))
+	else:
+		file.write("P5\n")
+		file.write("%d %d\n" % (len(img[0]), len(img)))
+		file.write("%d\n" % (max(max(img))))
+
+		for i in range(len(img)):
+			for j in range(len(img[i])):
+					file.write(chr(int(img[i][j])))
+
+	file.close()
 
 
 ########################################################################
@@ -96,6 +164,10 @@ def decompress_image(cluster_labels, cluster_centroids):
 	# todo: task7
 	# Iterate over the 2D list's elements and replace each value (cluster label) with value of its corresponding cluster centroid
 	# Use distance function (using distance from cluster.py to find the nearest cluster)
+	img = [[[0 for _ in range(3)] for _ in range(len(cluster_labels[0]))] for _ in range(len(cluster_labels))]
+	for i in range(len(cluster_labels)):
+		for j in range(len(cluster_labels[i])):
+			img[i][j] = list(cluster_centroids[cluster_labels[i][j]])
 
 	return img
 
