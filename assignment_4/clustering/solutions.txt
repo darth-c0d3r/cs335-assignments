@@ -1,5 +1,5 @@
-Name:
-Roll number:
+Name: Gurparkash Singh
+Roll number: 160050112
 ========================================
 
 
@@ -9,10 +9,27 @@ Roll number:
 
 
 1. Run your code on datasets/garden.csv, with different values of k. Looking at the performance plots, does the SSE of k-means algorithm ever increase as the iterations are made? (1 mark)
-Answer:
+Answer: No. For no value of k (checked from k=1 to k=10), does the value of SSE increases as the iteration are made. 
+		This is consistent with the property of the k-means clustering algorithm. In the algorithm, we make 2 updates.
+		1.  Assigning the data-points with the closest centroid. Since, we are changing the corresponding centroid
+			for a point to a closer centroid than before, the Euclidian distance between the point and its closest centroid
+			decreases. Since the distance for the non-moved points remains same, the overall SSE decreases.
+		2.  Moving the centroid to the mean of all the points. Since, we know that the mean minimizes the sum-squared error,
+			changing the centroid of a cluster to the mean of all the points in it decreases the SSE.
+		Therefore, any change that we make, ends up in decreasing the SSE. So, at no point does the SSE increase with iterations.
 
 3. Look at the files 3lines.png and mouse.png. Manually draw cluster boundaries around the 3 clusters visible in each file (no need to submit the hand drawn clusters). Test the k-means algorithm on the datasets datasets/3lines.csv and datasets/mouse.csv. How does the algorithm’s clustering compare with the clustering you would do by hand? Why do you think this happens? (1 mark)
-Answer:
+Answer: 
+		3lines.png: When we make clusters manually, we use the inuitive meaning of cluster and make clusters according to the densities
+					of their distributions. So, in case of 3 flat disks, which are close to each other, we will put all the points
+					which are in one disk in same cluster. However, the algorithm is more likely to put the closeby points from 
+					different disks together since, geometrically, the distance between them is lesser than the farthest points in the
+					same disk. So, to minimize the loss, the points closer geometrically but in different disks are put in same 
+					clusters.
+		mouse.png:	Manually clustering, we would put the two ears in two separate clusters and the face in the third cluster.
+					The algorithm also gives more or less the same clustering except that some points of face are in the clusters
+					corresponding to the ears. The reason that some of the points in the face circle are assigned to the ears cluster
+					is because these points are closer to the centroid of ear as compared to that of face.
 
 
 
@@ -25,28 +42,42 @@ Answer:
 
 Dataset     |  Initialization | Average SSE  | Average Iterations
 ==================================================================
-   100.csv  |        forgy    |             |
-   100.csv  |        kmeans++ |             |
-  1000.csv  |        forgy    |             |
-  1000.csv  |        kmeans++ |             |
- 10000.csv  |        forgy    |             |
- 10000.csv  |        kmeans++ |             |
+   100.csv  |        forgy    |8472.63311469 |		2.43
+   100.csv  |        kmeans++ |8472.63311469 |		2.04
+  1000.csv  |        forgy    |21337462.2968 |		3.28
+  1000.csv  |        kmeans++ |20015951.6024 |		3.44
+ 10000.csv  |        forgy    |170405443.386 |		19.55
+ 10000.csv  |        kmeans++ |78101703.8465 |		17.7
 
+For 100.csv, for both the initializations, the average SSE is same, however, on an average the kmeans++ makes the convergence faster.
+For 1000.csv, kmeans++ makes the SSE smaller, however, the average number of iterations goes up. However, if we look at the output, this is most likely a case of bad initialization. For the 25 experiments, for 24 experiments, the number of itertions was either 3
+or 4. For only one experiment, it was 10, which caused the average to increase.
+For 10000.csv, we see that using kmeans++, we get a much smaller SSE as compared to forgy. Also, kmeans++ makes the algorithm converge earlier.
+So, overall we see that using kmeans++ helps to converge at a better minima as well as in lesser number of iterations.
 
 ================
   TASK 4
 ================
 
 1. Can you observe from the visualization that k-medians algorithm is more robust to outliers as compared to k-means? Why do you think this happens? (1.5 marks)
-Answer:
+Answer: Yes, it can be observed from the visualization of clusters for flower.csv dataset that kmedians clustering is more robust
+		to outliers. The reason is the update rule. In kmeans clustering, we update the centroid to the mean of the points in the 
+		clusters. Since mean is sensitive to outliers, so is the associated centroid. In kmedians clustering, this problem
+		doesn't occur because we are updating according to the medians rule and median is not as sensitive to outliers.
 
 ================
   TASK 8
 ================
 
 1. What do you observe as we reduce the number of clusters (k)? Answer in reference to the quality of decompressed image. (0.5 mark)
-Answer:
+Answer: Number of clusters represent the number of colors we are using to represent our image. As we reduce k, the color accuracy
+		of the image decreases since we are representing it with fewer number of colors.
 
 
 2. You can observe that for the small number of clusters, the degree of compression (original size/compressed size) is about the same as that of when we use larger number of clusters even though we need to store lesser number of colors. Can you tell why? How can we increase this ratio in case of smaller number of clusters? [1 mark]
-Answer: 
+Answer: This is because even though we are using lesser number clusters, we are storing an integer (corresponding to a cluster) for 
+		each pixel in the image. This size remains the same even if we are using lesser number of clusters. If we want to increase the
+		compression ratio, we have to take advantage of the reduce in number of values occuring in the image. There are several 
+		compression techniques that take advantage of this fact, example lz compression etc. If we have lesser number of distinct
+		values we can store them as follows {(a,n),(b,m),...} where a is repeated n times and b is repeated m times and so on.
+		This is expected to increase the compression ratio.

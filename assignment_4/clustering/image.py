@@ -169,6 +169,11 @@ def decompress_image(cluster_labels, cluster_centroids):
 		for j in range(len(cluster_labels[i])):
 			img[i][j] = list(cluster_centroids[cluster_labels[i][j]])
 
+	for i in range(len(img)):
+		for j in range(len(img[i])):
+			for k in range(len(img[i][j])):
+				img[i][j][k] = int(img[i][j][k])
+
 	return img
 
 
