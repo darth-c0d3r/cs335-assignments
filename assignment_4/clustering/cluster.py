@@ -264,7 +264,7 @@ def initialization_kmeansplusplus(data, distance, k):
 			min_dist = float("inf")
 			# loop over all centroids to find closest centroid
 			for j in range(len(centroids)):
-				dist = distance(data[i], centroids[j])
+				dist = distance(data[i], centroids[j]) ** 2
 				if dist < min_dist:
 					min_dist = dist
 

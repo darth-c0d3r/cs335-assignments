@@ -43,15 +43,14 @@ Answer:
 Dataset     |  Initialization | Average SSE  | Average Iterations
 ==================================================================
    100.csv  |        forgy    |8472.63311469 |		2.43
-   100.csv  |        kmeans++ |8472.63311469 |		2.04
+   100.csv  |        kmeans++ |8472.63311469 |		2.00
   1000.csv  |        forgy    |21337462.2968 |		3.28
-  1000.csv  |        kmeans++ |20015951.6024 |		3.44
+  1000.csv  |        kmeans++ |19887301.0042 |		3.16
  10000.csv  |        forgy    |170405443.386 |		19.55
- 10000.csv  |        kmeans++ |78101703.8465 |		17.7
+ 10000.csv  |        kmeans++ |22323178.8625 |		7.5
 
 For 100.csv, for both the initializations, the average SSE is same, however, on an average the kmeans++ makes the convergence faster.
-For 1000.csv, kmeans++ makes the SSE smaller, however, the average number of iterations goes up. However, if we look at the output, this is most likely a case of bad initialization. For the 25 experiments, for 24 experiments, the number of itertions was either 3
-or 4. For only one experiment, it was 10, which caused the average to increase.
+For 1000.csv, kmeans++ makes the SSE smaller, also decreasing the average number of iterations required to converge.
 For 10000.csv, we see that using kmeans++, we get a much smaller SSE as compared to forgy. Also, kmeans++ makes the algorithm converge earlier.
 So, overall we see that using kmeans++ helps to converge at a better minima as well as in lesser number of iterations.
 
