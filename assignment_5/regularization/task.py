@@ -31,7 +31,6 @@ def preprocess(X, Y):
 			labels = np.unique(X[:,i]) # string
 			X_ = np.append(X_, one_hot_encode(X[:,i], labels),1)
 
-	print(X_.shape)
 	X_ = X_.astype('float64')
 	Y = Y.astype('float64')
 	return X_, Y
@@ -113,7 +112,28 @@ def coord_grad_descent(X, Y, _lambda, max_iter=2000):
 	max_iter 	= maximum number of iterations of gradient descent to run in case of no convergence
 	Return the trained weight vector [D X 1] after performing gradient descent using Ridge Loss Function 
 	'''
-	pass
+	def converged(W,A,B,_lambda):
+		return np.linalg.norm(2*(np.matmul(A,W) - B) + _lambda*np.sign(W)) < 1e0
+
+
+	XTX = np.matmul(X.T,X)
+	XTY = np.matmul(X.T,Y)
+
+	W = np.zeros((X.shape[1],1))
+	# W = np.random.randn(X.shape[1],1)
+
+	for epoch in range(max_iter):
+
+		# if converged(W,XTX,XTY,_lambda):
+			# return W
+
+		for k in range(W.shape[0]):
+			W[k,0] = (XTY[k,0] - (_lambda/2)*np.sign(W[k,0]) - np.matmul(XTX,W)[k,0] + XTX[k,k]*W[k,0])/XTX[k,k]
+
+	print(W.shape)
+	print(np.mean(W))
+	print(sum(W < 1e-20))
+	return W
 
 if __name__ == "__main__":
 	# Do your testing for Kfold Cross Validation in by experimenting with the code below 
