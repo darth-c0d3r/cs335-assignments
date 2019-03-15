@@ -28,7 +28,7 @@ def one_hot_encode(X, labels):
 	for i, l in enumerate(labels):
 		label_encoding[l] = i
 	for i in range(X.shape[0]):
-		newX[label_encoding[X[i,0]]] = 1
+		newX[i, label_encoding[X[i,0]]] = 1
 	return newX
 
 

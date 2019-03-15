@@ -19,7 +19,7 @@ def grade1():
 			print("TASK 1 Passed")
 		else:
 			marks = 0
-			print("Your output :\n", X_stud, Y_stud)
+			print("Your output : ", X_stud, Y_stud)
 			print("Expected output : ", X_act, Y_act)
 			print("TASK 1 Failed")
 	except KeyError as e:    
@@ -35,7 +35,6 @@ def grade2(trainX, trainY, testX, testY):
 		_lambda = 100
 		W_stud = ridge_grad_descent(trainX, trainY, _lambda)
 		W_act = np.linalg.inv(trainX.T @ trainX + _lambda * np.eye(trainX.shape[1])) @ trainX.T @ trainY
-		print(np.linalg.norm(W_stud - W_act))
 		if np.linalg.norm(W_stud - W_act) < 1:
 			marks = 2
 			print("TASK 2 Passed")
@@ -53,6 +52,7 @@ def grade2(trainX, trainY, testX, testY):
 	
 	return marks
 
+
 def grade3():
 	print('='*20 + ' TASK 3 - K Fold Cross Validation' + '='*20)
 	X = np.arange(60).reshape(20,3).astype(float)
@@ -60,7 +60,6 @@ def grade3():
 	lambdas = [1,2]
 	def dummy(X, Y, _lambda):
 		return np.linalg.inv(X.T @ X + _lambda * np.eye(X.shape[1])) @ X.T @ Y
-
 	try:
 		scores_stud = k_fold_cross_validation(X, Y, 2, lambdas, dummy)
 		scores_act  = [0.12615645, 0.24206764]
@@ -70,7 +69,7 @@ def grade3():
 			print("TASK 3 Passed")
 		else:
 			marks = 0
-			print("Your output :\n", scores_stud)
+			print("Your output : ", scores_stud)
 			print("Expected output : ", scores_act)
 			print("TASK 3 Failed")
 	except KeyError as e:    
@@ -83,16 +82,17 @@ def grade3():
 def grade4(trainX, trainY, testX, testY):
 	print('='*20 + ' TASK 4 - Lasso Regression' + '='*20)
 	try:
-		_lambda = 100
+		_lambda = 10000
 		W_stud = coord_grad_descent(trainX, trainY, _lambda)
-		rsse_stud = math.sqrt(sse(X, Y, W_stud))
-		rsse_act = 1355978
-		if math.fabs(rsse_stud - rsse_act) < 1e2 and sum(W_stud == 0) > 30:
+		rsse_stud = math.sqrt(sse(trainX, trainY, W_stud))
+		rsse_act = 731206
+		if rsse_stud - rsse_act < 1e3 and sum(W_stud == 0) > 30:
 			marks = 2.5
 			print("TASK 4 Passed")
 		else:
 			marks = 0
-			print("Your SSE", rsse_stud, rsse_act)
+			print("Your output : ", rsse_stud)
+			print("Expected output : ", rsse_act)
 			print("TASK 4 Failed")
 
 	except KeyError as e:    
@@ -112,7 +112,6 @@ if __name__ == "__main__":
 		sys.exit(1)
 
 	if sys.argv[1].lower() == 'all':
-		print("ALL")
 		m1 = grade1()
 		m2 = grade2(trainX, trainY, testX, testY)
 		m3 = grade3()
