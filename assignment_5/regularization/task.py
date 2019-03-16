@@ -1,5 +1,6 @@
 import numpy as np
 from utils import *
+import matplotlib.pyplot as plt
 
 # global pre computations
 XTX = None
@@ -100,6 +101,7 @@ def k_fold_cross_validation(X, Y, k, lambdas, algo):
 			W = algo(X_,Y_,_lambda)
 			sse_val += sse(X[(i*split_size):((i+1)*split_size),:],Y[(i*split_size):((i+1)*split_size),:],W)
 		avg_sse.append(sse_val/float(k))
+		# print("done for",_lambda)
 	return avg_sse
 
 
@@ -147,6 +149,10 @@ if __name__ == "__main__":
 	X, Y = preprocess(X, Y)
 	trainX, trainY, testX, testY = separate_data(X, Y)
 	print("data separation done")
-	lambdas = [0.1,1,10,100,1000] # Assign a suitable list Task 5 need best SSE on test data so tune lambda accordingly
-	scores = k_fold_cross_validation(trainX, trainY, 6, lambdas, ridge_grad_descent)
+	lambdas = [300000,325000,350000,375000,400000] # Assign a suitable list Task 5 need best SSE on test data so tune lambda accordingly
+	scores = k_fold_cross_validation(trainX, trainY, 6, lambdas, coord_grad_descent)
+	print(scores)
 	plot_kfold(lambdas, scores)
+
+	# W = coord_grad_descent(trainX, trainY, _lambda=350000)
+	# print(sse(testX, testY, W))

@@ -1,1 +1,85 @@
 TASK 3
+
+First, I took lambdas which were far away. And then I took lambdas around the lambda 
+with lowest cross-validation sse. I did this iteratively getting smaller and smaller intervals.
+Finally I go lambdas for which sse values wre similar.
+
+----------------------------------------------------------------------------------------------------
+
+For Ridge Regression, the lambdas in each iteration and their corresponding scores are:
+
+lambdas = [10,100,500,1000,10000]
+scores = [170427237660.53818, 181586975154.3868, 221837014979.66367, 263773217541.45642, 1062990950804.9733]
+
+lambdas = [0.1,1,10,50,100]
+scores = [191575327674.4447, 182345035833.03268, 170427237660.53818, 175029870155.8591, 181586975154.3868]
+
+lambdas = [1,10,20,30,40,50]
+scores = [182345035833.03268, 170427237660.53818, 170852942396.1074, 172169641689.43002, 173605306058.46985, 175029870155.8591]
+
+lambdas = [1,5,10,15,20]
+scores = [182345035833.03268, 172191422727.0811, 170427237660.53818, 170400443254.77917, 170852942396.1074]
+
+lambdas = [10,12.5,15,17.5,20]
+scores = [170427237660.53818, 170317276437.69046, 170400443254.77917, 170593729959.39993, 170852942396.1074]
+
+I have included 5 plots corresponding to 5 iterations.
+
+Final SSE on test set = 540283504803.491
+
+----------------------------------------------------------------------------------------------------
+
+For Lasso Regreesion, the lambdas in each iteration and their corresponding scores are:
+
+I have included 5 plots corresponding to 5 iterations.
+
+lambdas = [10,100,500,1000,10000]
+scores = [1586144842427.3584, 1546462961361.9365, 1377558509842.7488, 1183491023355.806, 216874766722.1602]
+
+lambdas = [1000,10000, 50000,100000,200000]
+scores = [1183491023355.806, 216874766722.1602, 194741653379.87454, 183548527166.26828, 172582347764.9169]
+
+lambdas = [100000,200000,300000,500000,1000000]
+scores = [183548527166.26828, 172582347764.9169, 169103564773.53122, 169788549500.39572, 183605246067.5413]
+
+lambdas = [200000,300000,350000,400000,500000]
+scores = [172582347764.9169, 169103564773.53122, 168874235082.79874, 169108976030.83334, 169788549500.39572]
+
+lambdas = [300000,325000,350000,375000,400000]
+scores = [169103564773.53122, 168880662440.5388, 168874235082.79874, 169060974990.62665, 169108976030.83334]
+
+Final SSE on test set = 532654048970.36786
+
+----------------------------------------------------------------------------------------------------
+
+As explained in the start, I used the plots to identify the lambda around which I should
+have the lambdas in the next iteration. Plot helps in easy visualization of the sse values.
+
+====================================================================================================
+
+TASK 5
+
+The difference in weights learned by the two methods is that Ridge regression tries to
+balance the weights, i.e. tries to make the magnitudes of all the weights nearly equal,
+whereas Lasso regression enforces sparsity. It will try to zero out the weights for the
+features that are not so important in determination of output values.
+
+The reason can be seen in the differences in the topographies of the functions 
+||W|| = c and ||W||2 = c. The former corresponds to Lasso Regression and the latter
+corresponds to Ridge Regression. 
+In the loss function, we are trying to minimize the MSE loss as well as the
+Regularization term. The topology for regularization term for Lasso Regression is that
+of 4 straight line (in 2D) segments whereas for Ridge Regression is a sphere. If we
+see the intersection of contours of MSE loss and regularization term, they are closer
+to axes for Lasso Regression as compared to Ridge Regression. So, as a result,
+the weights learned for Lasso Regression are more sparse.
+
+As such we can not declare one method to be better or worse. It depends on the problem
+in hand. However in cases when the features correspond to valid physical observations
+such as weight of human, height of human, location of house, number of rooms in house,
+number of floors, area of house, etc., Lasso Regression has a nice interpretation in
+the sense that the features that do not affect the output have zeroed out weights. So,
+in case our features have physical correspondences we can use Lasso Regression for
+interpretability. In this case, we get lower SSE on test set if we use Lasso Regression.
+
+====================================================================================================
