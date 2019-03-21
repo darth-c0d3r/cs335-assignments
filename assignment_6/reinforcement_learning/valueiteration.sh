@@ -1,0 +1,1 @@
+python3 mainScript.py $1
