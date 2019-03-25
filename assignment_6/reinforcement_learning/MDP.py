@@ -74,11 +74,13 @@ class MDP:
 			for state in self.allStates:
 				if state.idx in self.endStates:
 					continue
-				currValues = [float(0)] * self.numActions
+				currValues = [-float("inf")] * self.numActions
 
 				for idx, actions in enumerate(state.transitions):
-					for trx in actions:
-						currValues[idx] += (trx[2] * (trx[1] + (self.gamma * self.optValues[trx[0]])))
+					if len(actions) != 0:
+						currValues[idx] = 0.0
+						for trx in actions:
+							currValues[idx] += (trx[2] * (trx[1] + (self.gamma * self.optValues[trx[0]])))
 
 				newValue = max(currValues)
 				if abs(self.optValues[state.idx]-newValue) > epsilon:
@@ -98,6 +100,8 @@ class MDP:
 			currValue = -float("inf")
 			currIdx = -1
 			for idx, actions in enumerate(state.transitions):
+				if len(actions) == 0:
+					continue
 				currValueTemp = float(0)
 				for trx in actions:
 					currValueTemp += (trx[2] * (trx[1] + (self.gamma * self.optValues[trx[0]])))

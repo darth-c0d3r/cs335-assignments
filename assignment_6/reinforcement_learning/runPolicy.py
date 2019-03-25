@@ -4,6 +4,8 @@ from encodeMaze import encodeMazeProbabilistic
 import sys
 import numpy as np
 
+np.random.seed(0)
+
 def readPolicyFile(policy_file):
 	lines = None
 	with open(policy_file,'r') as file:
@@ -14,7 +16,6 @@ def readPolicyFile(policy_file):
 	return lines
 
 def runPolicyDeterministic(grid_file, policy_file):
-
 	mdp = encodeMazeDeterministic(grid_file)
 	actions = readPolicyFile(policy_file)
 
@@ -47,6 +48,11 @@ def runPolicyProbabilistic(grid_file, policy_file,p):
 		allStates = currState.transitions[actions[currState.idx]]
 		allProbab = [state[-1] for state in allStates]
 		allStates = [state[0] for state in allStates]
+
+		if len(allStates) == 0:
+			print(currState.idx)
+			print(actions[currState.idx])
+
 		currState = np.random.choice(allStates, p=allProbab)
 		currState = mdp.allStates[currState]
 
