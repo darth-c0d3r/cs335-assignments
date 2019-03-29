@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import os
 
 folder = "paths/"
-files = os.listdir(folder)
+files = sorted(os.listdir(folder))
 
 probs = []
 values = []

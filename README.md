@@ -19,4 +19,7 @@
 	<li>
 		<a href="https://www.cse.iitb.ac.in/~shivaram/teaching/cs337+335-s2019/resources/la-6/lab-assignment-6.html">Reinforcement Learning</a>
 	</li>
+	<li>
+		<a href="https://www.cse.iitb.ac.in/~shivaram/teaching/cs337+335-s2019/resources/la-7/lab-assignment-7.html">Search Algorithms</a>
+	</li>
 </ol> 

@@ -1,0 +1,22 @@
+Fron path.png
+	We can see that even though the agent finally reaches the goal
+	state, on the path it tends to take detours. This happens because
+	on each state it follows the optimal step with highest probability,
+	but with a finite probability it also takes a step in random direction.
+	This makes the path longer than the optimal path.
+
+From plot.png
+	We see that the number of steps required to reach the goal state
+	decreases as we increase the probability of correct action taken.
+	This is expected, since given a fixed optimal policy, if we follow
+	it deterministically, we will always take the shortest path. If,
+	however, with some probability we take the wrong step, then the
+	path length will increase. With decreasing values of p, the 
+	probabilty that the agent will stray off optimal path increases,
+	thus increasing the path length. It is interesting to note that
+	if p is non-zero (anything other than random), the algorithm still
+	learns the correct optimal policy. This is because the expected 
+	total reward is still maximum on the same path. If p=0, it doesn't
+	matter which step we take as long as it is valid as the agent walks
+	in a random direction anyway.
+
