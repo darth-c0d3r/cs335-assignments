@@ -1,0 +1,39 @@
+Q1: Compare the graphs task2_submit.png , task3_submit.png and task4_submit.png
+and write down your observations in observations.txt. Comment on which 
+initialisation method is better and why that is the case.
+
+Ans: We can see that, in task2 (random init), final path-size is at around 500-600,
+	 however it takes around 65-70 iteration to get there. In task3 (nearest
+	 neighbour init), we see that there is a lot of variance with the change 
+	 in start city with respect to both, number of iterations to converege, as
+	 well as the final path-size. In the best case, the path-size is around 600-700,
+	 and it takes around 15 iterations to get there. Since this method is very
+	 sensitive to start city, it should be only used by taking the best case out
+	 of several different start initialization. In task4 (euclidian tour),
+	 the final path-size is at around 500-600 and it is also reached in around 17-18
+	 iterations. 
+	 Therefore, in from the observations, we can conclude that euclidian tour init
+	 is  the best since random init takes too many iterations to converge and the
+	 convergence of nearest neighbour init is highly sensitive to start	city.
+
+	 [start_city for euclidian tour? why is it best?]
+
+Q2: Visually inspect the two graphs task2_submit.png and task6_submit.png and 
+write down your observations in observations.txt. Comment on which neighbour-
+generating method is better (if at all) and why?
+
+Ans:
+
+Q3: Compare the two graphs task3_submit.png and task7_submit.png and write down 
+your observations in observations.txt. Comment your opinion on which neighbour 
+generating method is better in this case and why?
+
+Ans:
+
+Q4: Compare the graphs task4_submit.png and task8_submit.png and write down 
+your observations in observations.txt. Comment your opinion on which neighbour 
+generating method is better in this case and why?
+
+Ans:
+
+
