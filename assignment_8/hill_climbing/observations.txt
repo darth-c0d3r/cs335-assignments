@@ -1,39 +1,69 @@
 Q1: Compare the graphs task2_submit.png , task3_submit.png and task4_submit.png
 and write down your observations in observations.txt. Comment on which 
-initialisation method is better and why that is the case.
+initialization method is better and why that is the case.
 
 Ans: We can see that, in task2 (random init), final path-size is at around 500-600,
 	 however it takes around 65-70 iteration to get there. In task3 (nearest
 	 neighbour init), we see that there is a lot of variance with the change 
-	 in start city with respect to both, number of iterations to converege, as
+	 in start city with respect to both, number of iterations to converge, as
 	 well as the final path-size. In the best case, the path-size is around 600-700,
 	 and it takes around 15 iterations to get there. Since this method is very
 	 sensitive to start city, it should be only used by taking the best case out
-	 of several different start initialization. In task4 (euclidian tour),
+	 of several different start initialization. In task4 (Euclidian tour),
 	 the final path-size is at around 500-600 and it is also reached in around 17-18
 	 iterations. 
 	 Therefore, in from the observations, we can conclude that euclidian tour init
-	 is  the best since random init takes too many iterations to converge and the
+	 is the best since random init takes too many iterations to converge and the
 	 convergence of nearest neighbour init is highly sensitive to start	city.
+	 Although it is not shown in the submitted graphs, I checked the answer for
+	 Euclidian Tour init on various different initial cities and the results were
+	 similar for all start states.
 
-	 [start_city for euclidian tour? why is it best?]
+
+Common for Q2 to Q5:
+In general, hill climbing using 3OptNeighbours is expected to converge faster
+but at similar path lengths as that using 2OptNeighbours. If 2 paths are
+3Opt neighbours, then they can be reached using 2 steps of 2OptNeighbours.
+So, the set of paths explored would be similar, however the number of iterations
+would decrease while using 3OptNeighbours. The difference in path length will
+occur in cases when hill climbing using 2OptNeighbours converges but after one
+more step, the path length will still decrease. In that case, hill climbing 
+using 2OptNeighbours will keep going and converge to a path of lower length.
+So it is guaranteed that using the union of these we will converge at a path
+of length less than or equal to path length using only 2OptNeighbours. At the
+end it is a trade-off between the optimality of the solution and running time.
+This is because even though the on the graphs various convergence values are
+similar, they tend to be lower for the 3OptNeighbours case.
 
 Q2: Visually inspect the two graphs task2_submit.png and task6_submit.png and 
-write down your observations in observations.txt. Comment on which neighbour-
+write down your observations in observations.txt. Comment on which neighbour
 generating method is better (if at all) and why?
 
-Ans:
+Ans: We can see that both the methods converge to paths of similar lengths, 
+	 however, using 2OptNeighbours along with 2OptNeighbours makes the
+	 algorithm converge in lower number of iterations. However, each iteration
+	 takes much longer time. So, overall time using 3OptNeighbours is more than
+	 using only 2OptNeighbours whereas the convergence point is similar. So,
+	 using only 2OptNeighbours is better in this case.
 
 Q3: Compare the two graphs task3_submit.png and task7_submit.png and write down 
 your observations in observations.txt. Comment your opinion on which neighbour 
 generating method is better in this case and why?
 
-Ans:
+Ans: In this case, we can see that out of the 5 starting points, minimum path 
+	 length is similar for both the algorithms. However, using 3OptNeighbours
+	 makes the algorithm converge in lesser number of iterations. However, the
+	 main advantage that we get is that the dependence on start state is much
+	 less while also using 3OptNeighbours. The reason for this is explained in
+	 the common part. Thus using 3OptNeighbours in this case will make our
+	 algorithm less error prone, so this is better.
 
 Q4: Compare the graphs task4_submit.png and task8_submit.png and write down 
 your observations in observations.txt. Comment your opinion on which neighbour 
 generating method is better in this case and why?
 
-Ans:
-
-
+Ans: In this case, both the methods converge to similar path lengths in nearly
+	 same number of iterations. Thus in that sense, both algorithms are more
+	 or less equivalent. However, since each iteration for 
+	 3OptNeighbours takes more time, in practice we might prefer to use 
+	 only 2OptNeighbours.
