@@ -22,4 +22,7 @@
 	<li>
 		<a href="https://www.cse.iitb.ac.in/~shivaram/teaching/cs337+335-s2019/resources/la-7/lab-assignment-7.html">Search Algorithms</a>
 	</li>
+	<li>
+		<a href="https://www.cse.iitb.ac.in/~shivaram/teaching/cs337+335-s2019/resources/la-8/lab-assignment-8.html">Hill Climbing Search</a>
+	</li>
 </ol> 
